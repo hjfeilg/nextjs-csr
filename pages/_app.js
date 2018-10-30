@@ -3,15 +3,12 @@ import Router from '../route'
 import * as React from 'react'
 
 const checkSSR = (ctx) => {
-  /*
   if (ctx && ctx.req && ctx.req.headers && ctx.req.headers.cookie) {
     if (/token=[a-zA-Z0-9]/.test(ctx.req.headers.cookie)) {
       return false
     }
   }
   return true
-  */
-  return false
 }
 
 export default class MyApp extends App {
@@ -21,9 +18,11 @@ export default class MyApp extends App {
     let pageProps = {}
     let ssr = false
 
-    if (!process.browser && checkSSR(ctx) && Component.getInitialProps) {
+    if (!process.browser && checkSSR(ctx)) {
       ssr = true
-      pageProps = await Component.getInitialProps(ctx)
+      if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps(ctx)
+      }
     }
 
     return {
